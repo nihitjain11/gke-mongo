@@ -5,7 +5,9 @@
 
 # Create new GKE Kubernetes cluster (using host node VM images based on Ubuntu
 # rather than ChromiumOS default & also use slightly larger VMs than default)
-gcloud container clusters create "gke-mongodb-demo-cluster" --image-type=UBUNTU --machine-type=n1-standard-2
+
+## commented below as cluster already exists
+##gcloud container clusters create "gke-mongodb-demo-cluster" --image-type=UBUNTU --machine-type=n1-standard-2
 
 # Configure host VM using daemonset to disable hugepages
 kubectl apply -f ../resources/hostvm-node-configurer-daemonset.yaml
@@ -48,7 +50,7 @@ echo "Waiting for the 3 containers to come up (`date`)..."
 echo " (IGNORE any reported not found & connection errors)"
 sleep 30
 echo -n "  "
-until kubectl --v=0 exec mongod-2 -c mongod-container -- mongo --quiet --eval 'db.getMongo()'; do
+until kubectl --v=0 exec mongod-2 -c mongod-container -- mongosh --quiet --eval 'db.getMongo()'; do
     sleep 5
     echo -n "  "
 done
